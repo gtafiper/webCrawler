@@ -5,22 +5,24 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfApp"
         mc:Ignorable="d"
-        Title="MainWindow" Height="236" Width="694">
-    <Grid>
+        Title="MainWindow" Height="316" Width="646">
+    <Grid HorizontalAlignment="Left" Width="642" Height="275" VerticalAlignment="Top">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="198*"/>
-            <ColumnDefinition Width="83*"/>
-            <ColumnDefinition Width="66*"/>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="0*"/>
+            <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
-        <TextBlock x:Name="titel" Margin="25,20,108,180" TextWrapping="Wrap" Text="Enter the website you wish to monitor"/>
+        <TextBlock x:Name="titel" Margin="25,20,0,0" TextWrapping="Wrap" Text="Enter the website you wish to monitor" HorizontalAlignment="Left" Width="258" Height="20" VerticalAlignment="Top"/>
         <TextBox x:Name="websiteTextBox" Margin="25,46,0,0" TextWrapping="Wrap" Height="18" VerticalAlignment="Top" HorizontalAlignment="Left" Width="259"/>
         <TextBlock HorizontalAlignment="Left" Margin="25,91,0,0" Text="Enter the name of the show you wish to monitor" TextWrapping="Wrap" VerticalAlignment="Top" Width="261" Height="16"/>
-        <TextBox Margin="25,111,0,0" TextWrapping="Wrap" Height="18" VerticalAlignment="Top" HorizontalAlignment="Left" Width="259"/>
-        <Button Content="Add To List" Margin="24,158,0,0" Height="20" VerticalAlignment="Top" HorizontalAlignment="Left" Width="62"/>
-        <ListBox x:Name="pagesListBox" Margin="315,20,97,11" Grid.ColumnSpan="2"/>
-        <ListBox x:Name="showsListBox" Margin="92,20,0,11" Grid.Column="1" Grid.ColumnSpan="2" HorizontalAlignment="Left" Width="145"/>
-        <TextBlock HorizontalAlignment="Left" Margin="316,3,0,202" Text="Pages being monitored now" TextWrapping="Wrap" Width="148" FontSize="11" Grid.ColumnSpan="2"/>
-        <TextBlock HorizontalAlignment="Left" Margin="93,3,0,201" Text="Shows being watched now" TextWrapping="Wrap" Width="147" Grid.Column="1" Grid.ColumnSpan="2"/>
+        <TextBox x:Name="showTextBox" Margin="25,111,0,0" TextWrapping="Wrap" Height="18" VerticalAlignment="Top" HorizontalAlignment="Left" Width="259"/>
+        <Button Content="Add To List" Margin="24,158,0,0" Height="20" VerticalAlignment="Top" HorizontalAlignment="Left" Width="62" Click="Button_Click"/>
+        <ListBox x:Name="pagesListBox" Margin="315,20,0,31" HorizontalAlignment="Left" Width="150" SelectionChanged="pagesListBox_SelectionChanged"/>
+        <TextBlock HorizontalAlignment="Left" Margin="316,3,0,0" Text="Pages being monitored now" TextWrapping="Wrap" Width="148" FontSize="11" Height="15" VerticalAlignment="Top"/>
+        <TextBlock HorizontalAlignment="Left" Margin="478,1,0,0" Text="Shows being watched now" TextWrapping="Wrap" Width="147" Height="16" VerticalAlignment="Top"/>
+        <ListBox x:Name="showsListBox" Margin="477,20,0,31" RenderTransformOrigin="0.491,0.503" HorizontalAlignment="Left" Width="150"/>
+        <Button Content="Remove Selected Page" HorizontalAlignment="Left" Margin="315,247,0,0" VerticalAlignment="Top" Click="Button_Click_1"/>
+        <Button Content="Remove Selected Show" HorizontalAlignment="Left" Margin="476,247,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.513,0.457" Click="RemoveShowButton"/>
 
     </Grid>
 </Window>
