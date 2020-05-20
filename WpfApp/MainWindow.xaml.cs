@@ -49,7 +49,7 @@ namespace WpfApp
             }
             else
             {
-                MessageBox.Show("Please select a Item to remove");
+                MessageBox.Show("Please select a Show to remove");
             }
         }
 
@@ -61,7 +61,7 @@ namespace WpfApp
             }
             else
             {
-                MessageBox.Show("Please select a Item to remove");
+                MessageBox.Show("Please select a Page to remove");
             }
         }
     }
