@@ -5,9 +5,22 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfApp"
         mc:Ignorable="d"
-        Title="MainWindow" Height="339" Width="610">
+        Title="MainWindow" Height="236" Width="694">
     <Grid>
-        <TextBlock HorizontalAlignment="Left" Margin="25,26,0,0" Text="TextBlock" TextWrapping="Wrap" VerticalAlignment="Top"/>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="198*"/>
+            <ColumnDefinition Width="83*"/>
+            <ColumnDefinition Width="66*"/>
+        </Grid.ColumnDefinitions>
+        <TextBlock x:Name="titel" Margin="25,20,108,180" TextWrapping="Wrap" Text="Enter the website you wish to monitor"/>
+        <TextBox x:Name="websiteTextBox" Margin="25,46,0,0" TextWrapping="Wrap" Height="18" VerticalAlignment="Top" HorizontalAlignment="Left" Width="259"/>
+        <TextBlock HorizontalAlignment="Left" Margin="25,91,0,0" Text="Enter the name of the show you wish to monitor" TextWrapping="Wrap" VerticalAlignment="Top" Width="261" Height="16"/>
+        <TextBox Margin="25,111,0,0" TextWrapping="Wrap" Height="18" VerticalAlignment="Top" HorizontalAlignment="Left" Width="259"/>
+        <Button Content="Add To List" Margin="24,158,0,0" Height="20" VerticalAlignment="Top" HorizontalAlignment="Left" Width="62"/>
+        <ListBox x:Name="pagesListBox" Margin="315,20,97,11" Grid.ColumnSpan="2"/>
+        <ListBox x:Name="showsListBox" Margin="92,20,0,11" Grid.Column="1" Grid.ColumnSpan="2" HorizontalAlignment="Left" Width="145"/>
+        <TextBlock HorizontalAlignment="Left" Margin="316,3,0,202" Text="Pages being monitored now" TextWrapping="Wrap" Width="148" FontSize="11" Grid.ColumnSpan="2"/>
+        <TextBlock HorizontalAlignment="Left" Margin="93,3,0,201" Text="Shows being watched now" TextWrapping="Wrap" Width="147" Grid.Column="1" Grid.ColumnSpan="2"/>
 
     </Grid>
 </Window>
