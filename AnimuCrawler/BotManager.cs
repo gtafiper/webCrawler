@@ -26,7 +26,7 @@ namespace AnimuCrawler
             return manager;
         }
 
-        public void addBot(string watchLink, string title)
+        public void AddBot(string watchLink, string title)
         {
             AnimuCrawlerBot crawler = new AnimuCrawlerBot(watchLink, title, 50000);
             crawler.StartWatching();
@@ -34,8 +34,8 @@ namespace AnimuCrawler
             CrawlersRunning.Add(crawler);
         }
 
-        private void endBot() { }
-        private void endAllBots()
+        private void EndBot() { }
+        private void EndAllBots()
         {
             foreach (AnimuCrawlerBot crawler in CrawlersRunning)
             {
