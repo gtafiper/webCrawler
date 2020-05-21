@@ -6,15 +6,7 @@
         xmlns:local="clr-namespace:WpfApp"
         mc:Ignorable="d"
         Title="MainWindow" Height="325" Width="684">
-    <Grid HorizontalAlignment="Left" Width="678" Height="294" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5">
-        <Grid.RenderTransform>
-            <TransformGroup>
-                <ScaleTransform/>
-                <SkewTransform/>
-                <RotateTransform Angle="4.2"/>
-                <TranslateTransform/>
-            </TransformGroup>
-        </Grid.RenderTransform>
+    <Grid HorizontalAlignment="Left" Width="678" Height="294" VerticalAlignment="Top">
         <Grid.RowDefinitions>
             <RowDefinition/>
             <RowDefinition Height="0*"/>
