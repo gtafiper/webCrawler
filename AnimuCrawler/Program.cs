@@ -11,9 +11,12 @@ namespace AnimuCrawler
             Console.Write("Enter an Name: ");
             var nameStr = Console.ReadLine();
 
-            AnimuCrawlerBot senpai = new AnimuCrawlerBot(urlStr, nameStr);
+            AnimuCrawlerBot senpai = new AnimuCrawlerBot(urlStr, nameStr, 5000);
             senpai.StartWatching();
             Console.ReadLine();
+            senpai.seen();
+            Console.ReadLine();
+
         }
     }
 }
