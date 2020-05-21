@@ -27,15 +27,10 @@ namespace AnimuCrawler
 
         public void DeleteShow(string show)
         {
-            using StreamWriter sw = File.AppendText("shows.txt");
-            List<string> lines = ReadShows();
-            lines.Remove(show);
-            foreach (var line in lines) 
-            {
-                sw.WriteLine(line);
-            }
-            sw.Close();
-            
+            var oldLines = System.IO.File.ReadAllLines("shows.txt");
+            var newLines = oldLines.Where(line => !line.Contains(show));
+            System.IO.File.WriteAllLines("shows.txt", newLines);
+
         }
     }
 }

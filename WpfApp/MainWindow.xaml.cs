@@ -41,10 +41,11 @@ namespace WpfApp
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             string website = this.websiteTextBox.Text;
+            this.pagesListBox.Items.Add(website);
            
             string show = this.showTextBox.Text;
             reader.WriteShow(show);
-            this.pagesListBox.Items.Add(website);
+            
             
             foreach (var item in reader.ReadShows())
             {
