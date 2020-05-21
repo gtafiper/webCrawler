@@ -30,15 +30,16 @@ namespace AnimuCrawler
             {
                 return null;
             }
-            
         }
 
         public void DeleteShow(string show)
         {
-            var oldLines = System.IO.File.ReadAllLines("shows.txt");
-            var newLines = oldLines.Where(line => !line.Contains(show));
-            System.IO.File.WriteAllLines("shows.txt", newLines);
+            var lines = ReadShows();
+            var newLines = lines.Where(line => !line.Contains(show));
+            using StreamWriter sw = File.AppendText("shows2.txt");
 
+
+            File.Copy("shows2.txt", "shows.txt", true);
         }
     }
 }
