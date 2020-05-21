@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace AnimuCrawler
 {
@@ -34,7 +29,9 @@ namespace AnimuCrawler
             CrawlersRunning.Add(crawler);
         }
 
-        private void EndBot() { }
+        private void EndBot(int index) {
+            CrawlersRunning[index].StopWatching();
+        }
         private void EndAllBots()
         {
             foreach (AnimuCrawlerBot crawler in CrawlersRunning)

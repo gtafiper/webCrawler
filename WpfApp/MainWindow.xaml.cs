@@ -28,11 +28,13 @@ namespace WpfApp
         {
             InitializeComponent();
             List<string> listOfShows = reader.ReadShows();
-            foreach (var item in listOfShows)
+            if (listOfShows != null)
             {
-                showsListBox.Items.Add(item);
+                foreach (var item in listOfShows)
+                {
+                    showsListBox.Items.Add(item);
+                }
             }
-            
         }
 
 

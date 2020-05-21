@@ -20,9 +20,17 @@ namespace AnimuCrawler
 
         public List<string> ReadShows()
         {
-            List<string> list = File.ReadAllLines("shows.txt").ToList();
+            try
+            {
+                List<string> list = File.ReadAllLines("shows.txt").ToList();
 
-            return list;
+                return list;
+            }
+            catch (FileNotFoundException)
+            {
+                return null;
+            }
+            
         }
 
         public void DeleteShow(string show)
