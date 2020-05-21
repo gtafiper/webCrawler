@@ -29,7 +29,9 @@ namespace AnimuCrawler
             CrawlersRunning.Add(crawler);
         }
 
-        private void EndBot() { }
+        private void EndBot(int index) {
+            CrawlersRunning[index].StopWatching();
+        }
         private void EndAllBots()
         {
             foreach (AnimuCrawlerBot crawler in CrawlersRunning)
