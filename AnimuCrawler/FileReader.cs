@@ -11,6 +11,11 @@ namespace AnimuCrawler
         public void WriteNewBotToFile(AnimuCrawlerBot crawler)
         {
             string path = @"bots\" + crawler.ID.ToString() + ".txt";
+            if (!Directory.Exists("bots"))
+            {
+                Directory.CreateDirectory("bots");
+            }
+
             using StreamWriter sw = File.AppendText(path);
 
             sw.WriteLine(crawler.WatchLink);

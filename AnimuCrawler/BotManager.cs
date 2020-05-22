@@ -10,20 +10,26 @@ namespace AnimuCrawler
     {
         private FileReader fileReader;
         private ObservableCollection<AnimuCrawlerBot> crawlers;
+
         public ObservableCollection<AnimuCrawlerBot> CrawlersRunning
         {
             get { return crawlers; }
             private set { crawlers = value; }
         }
+
         private static BotManager manager;
 
 
         private BotManager()
         {
-            try {
+            fileReader = new FileReader();
+            try
+            {
                 List<AnimuCrawlerBot> temp = fileReader.GetAllBots();
                 CrawlersRunning = new ObservableCollection<AnimuCrawlerBot>(temp);
-            } catch {
+            }
+            catch
+            {
                 CrawlersRunning = new ObservableCollection<AnimuCrawlerBot>();
             }
         }
@@ -50,10 +56,12 @@ namespace AnimuCrawler
             int id = 0;
             foreach (var item in CrawlersRunning)
             {
-                if (item.ID > id) {
+                if (item.ID > id)
+                {
                     id = item.ID;
                 }
             }
+
             return id + 1;
         }
 
@@ -63,7 +71,8 @@ namespace AnimuCrawler
             active.StopWatching();
         }
 
-        public void StartBot(AnimuCrawlerBot active) {
+        public void StartBot(AnimuCrawlerBot active)
+        {
             active.StartWatching();
         }
 
