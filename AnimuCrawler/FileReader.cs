@@ -10,23 +10,23 @@ namespace AnimuCrawler
     {
         public void WriteNewBotToFile(AnimuCrawlerBot crawler)
         {
-            string path = @"bots\" + crawler.GetId().ToString() + ".txt";
+            string path = @"bots\" + crawler.ID.ToString() + ".txt";
             using StreamWriter sw = File.AppendText(path);
 
-            sw.WriteLine(crawler.GetWatchLink());
-            sw.WriteLine(crawler.GetSeriesName());
-            sw.WriteLine(crawler.GetUpdateTime());
-            sw.WriteLine(crawler.GetId());
+            sw.WriteLine(crawler.WatchLink);
+            sw.WriteLine(crawler.SeriesName);
+            sw.WriteLine(crawler.UpdateTime);
+            sw.WriteLine(crawler.ID);
             sw.Close();
         }
 
 
         public void SaveShows(AnimuCrawlerBot crawler)
         {
-            string path = @"bots\" + crawler.GetId().ToString() + ".txt";
+            string path = @"bots\" + crawler.ID.ToString() + ".txt";
             using StreamWriter sw = File.AppendText(path);
             sw.WriteLine("episodeLinks:");
-            foreach (var link in crawler.GetEpisodes())
+            foreach (var link in crawler.Episodes)
             {
                 sw.WriteLine(link);
             }
@@ -38,7 +38,7 @@ namespace AnimuCrawler
         {
             try
             {
-                File.Delete(@"bots\" + crawler.GetId().ToString() + ".txt");
+                File.Delete(@"bots\" + crawler.ID.ToString() + ".txt");
             }
             catch (FileNotFoundException e)
             {

@@ -15,7 +15,7 @@ namespace AnimuCrawler
         private static readonly string STATE_RUNNING = "Running";
 
         private static readonly WebClient Client = new WebClient();
-        private readonly List<Uri> episodes;
+        public List<Uri> Episodes { get; }
         Thread thread;
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -73,7 +73,7 @@ namespace AnimuCrawler
             this.watchLink = new UriBuilder(link).Uri;
             this.seriesName = seriesName;
             this.updateTime = updateTime;
-            episodes = new List<Uri>();
+            Episodes = new List<Uri>();
             foundNew = false;
             Status = STATE_PAUSE;
             this.id = id;
@@ -135,10 +135,10 @@ namespace AnimuCrawler
             if (noSpeTitle.ToLower().Contains(noSpeName.ToLower()))
             {
                 Uri absoluteUrl = NormalizeUrl(watchLink, newUrl);
-                if (!episodes.Contains(absoluteUrl) &&
+                if (!Episodes.Contains(absoluteUrl) &&
                     (absoluteUrl.Scheme == Uri.UriSchemeHttp || absoluteUrl.Scheme == Uri.UriSchemeHttps))
                 {
-                    episodes.Add(absoluteUrl);
+                    Episodes.Add(absoluteUrl);
                     Console.WriteLine(absoluteUrl.ToString());
                     FoundNew = true;
                 }
