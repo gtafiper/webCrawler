@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfApp"
         mc:Ignorable="d"
-        Title="MainWindow" Height="345" Width="746" Background="#FFAAAAAA" ResizeMode="NoResize">
+        Title="MainWindow" Height="345" Width="746" Background="#FFAAAAAA" ResizeMode="NoResize" Closing="Window_Closing">
     <Window.BorderBrush>
         <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ActiveCaptionTextColorKey}}"/>
     </Window.BorderBrush>
@@ -13,7 +13,8 @@
         <DataGrid Margin="30,31,30,0" VerticalGridLinesBrush="#002E2E2E"
                   x:Name="dataGrid"
                   ItemsSource="{Binding Crawlers}" IsReadOnly="True"
-                  AutoGenerateColumns="False" HeadersVisibility="All" RowHeaderWidth="10" HorizontalContentAlignment="Left" Height="234" VerticalAlignment="Top" MinWidth="700" SelectionChanged="dataGrid_SelectionChanged">
+                  AutoGenerateColumns="False" HeadersVisibility="All" RowHeaderWidth="10" HorizontalContentAlignment="Left" Height="234" VerticalAlignment="Top" MinWidth="700" 
+                  SelectionChanged="dataGrid_SelectionChanged">
             <DataGrid.Columns>
                 <DataGridHyperlinkColumn x:Name="link" Header="Site"  Binding="{Binding WatchLink}" CanUserResize="False" MinWidth="300" MaxWidth="300"/>
                 <DataGridTextColumn Header="Key Word" Binding="{Binding SeriesName}" CanUserResize="False" MinWidth="200" MaxWidth="200" />

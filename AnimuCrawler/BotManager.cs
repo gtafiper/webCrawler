@@ -80,7 +80,7 @@ namespace AnimuCrawler
         {
             foreach (AnimuCrawlerBot crawler in CrawlersRunning)
             {
-                crawler.StopWatching();
+                EndBot(crawler);
             }
         }
 

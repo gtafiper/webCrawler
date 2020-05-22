@@ -15,12 +15,6 @@ namespace WpfApp
         private BotManager manager;
         private AnimuCrawlerBot active;
 
-        public ObservableCollection<AnimuCrawlerBot> Crawlers
-        {
-            get { return crawlers; }
-            set { crawlers = value; }
-        }
-
         public BotManager Manager
         {
             get { return manager; }
@@ -35,9 +29,6 @@ namespace WpfApp
             dataGrid.ItemsSource = Manager.CrawlersRunning;
             isButtonsEnabeld(false);
         }
-
-
-
 
         private void OnAdd(object sender, RoutedEventArgs e)
         {
@@ -61,7 +52,7 @@ namespace WpfApp
 
         }
 
-        private void dataGrid_Selected(object sender, RoutedEventArgs e)
+        private void datarow_Selected(object sender, RoutedEventArgs e)
         {
         }
 
@@ -72,6 +63,7 @@ namespace WpfApp
             {
                 isButtonsEnabeld(true);
                 active = temp;
+                active.Seen();
             }
             else {
                 isButtonsEnabeld(false);
@@ -82,6 +74,11 @@ namespace WpfApp
             this.btnStart.IsEnabled = result;
             this.btnPause.IsEnabled = result;
             this.btnRemove.IsEnabled = result;
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            manager.EndAllBots();
         }
     }
 }
