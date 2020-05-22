@@ -30,7 +30,6 @@ namespace AnimuCrawler
         {
             string path = @"bots\" + crawler.ID.ToString() + ".txt";
             using StreamWriter sw = File.AppendText(path);
-            sw.WriteLine("episodeLinks:");
             foreach (var link in crawler.Episodes)
             {
                 sw.WriteLine(link);
