@@ -68,7 +68,7 @@ namespace AnimuCrawler
             int updateTime;
             try
             {
-                updateTime = int.Parse(File.ReadAllLines(path).Skip(2).FirstOrDefault());
+                updateTime = int.Parse(File.ReadAllLines(path).Skip(2).FirstOrDefault() ?? throw new InvalidOperationException());
             }
             catch (Exception e)
             {
@@ -79,9 +79,22 @@ namespace AnimuCrawler
             return updateTime;
         }
 
-        private string GetCrawlerId(string path)
+        private int GetCrawlerId(string path)
         {
-            return File.ReadAllLines(path).Skip(3).FirstOrDefault();
+            int id;
+            try
+            {
+
+                id = int.Parse(File.ReadAllLines(path).Skip(3).FirstOrDefault() ?? throw new InvalidOperationException());
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+
+            return id;
         }
 
         private string FindBotId(string id)
