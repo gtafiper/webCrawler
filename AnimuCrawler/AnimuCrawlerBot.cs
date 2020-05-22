@@ -21,6 +21,7 @@ namespace AnimuCrawler
         public event PropertyChangedEventHandler PropertyChanged;
 
         private Task task;
+        private string id;
         private string status;
         private bool foundNew;
         private int updateTime;
@@ -63,7 +64,7 @@ namespace AnimuCrawler
             get { return seriesName; }
         }
 
-        public AnimuCrawlerBot(string link, string seriesName, int updateTime)
+        public AnimuCrawlerBot(string link, string seriesName, int updateTime, string id)
         {
             this.watchLink = new UriBuilder(link).Uri;
             this.seriesName = seriesName;
@@ -71,6 +72,7 @@ namespace AnimuCrawler
             episodes = new List<Uri>();
             foundNew = false;
             Status = STATE_PAUSE;
+            this.id = id;
         }
 
         public void StartWatching()
@@ -128,8 +130,9 @@ namespace AnimuCrawler
 
             if (noSpeTitle.ToLower().Contains(noSpeName.ToLower()))
             {
-                Uri absoluteUrl = NormalizeUrl(WatchLink, newUrl);
-                if (!episodes.Contains(absoluteUrl) && (absoluteUrl.Scheme == Uri.UriSchemeHttp || absoluteUrl.Scheme == Uri.UriSchemeHttps))
+                Uri absoluteUrl = NormalizeUrl(watchLink, newUrl);
+                if (!episodes.Contains(absoluteUrl) &&
+                    (absoluteUrl.Scheme == Uri.UriSchemeHttp || absoluteUrl.Scheme == Uri.UriSchemeHttps))
                 {
                     episodes.Add(absoluteUrl);
                     Console.WriteLine(absoluteUrl.ToString());
@@ -154,8 +157,7 @@ namespace AnimuCrawler
             bool urlOk = Uri.TryCreate(hostUrl, url, out var absoluteUrl);
             if (urlOk)
             {
-                return absoluteUrl.ToString().EndsWith("/") ?
-                    absoluteUrl : new UriBuilder(absoluteUrl + "/").Uri;
+                return absoluteUrl.ToString().EndsWith("/") ? absoluteUrl : new UriBuilder(absoluteUrl + "/").Uri;
             }
             else
             {

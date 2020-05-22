@@ -6,6 +6,7 @@ namespace AnimuCrawler
 {
     public class BotManager
     {
+        private FileReader fileReader;
         private ObservableCollection<AnimuCrawlerBot> crawlers;
         public ObservableCollection<AnimuCrawlerBot> CrawlersRunning
         {
@@ -14,9 +15,11 @@ namespace AnimuCrawler
         }
         private static BotManager manager;
 
+
         private BotManager()
         {
             CrawlersRunning = new ObservableCollection<AnimuCrawlerBot>();
+            CrawlersRunning1 = fileReader.GetAllBots();
         }
 
         public static BotManager GetInstance()
@@ -25,14 +28,22 @@ namespace AnimuCrawler
             {
                 manager = new BotManager();
             }
+
             return manager;
         }
 
-        public void AddBot(string watchLink, string title)
+        public void AddBot(string watchLink, string title, string id)
         {
             AnimuCrawlerBot crawler = new AnimuCrawlerBot(watchLink, title, 50000);
+            fileReader.WriteNewBotToFile(crawler);
             CrawlersRunning.Add(crawler);
         }
+
+private void EndBot(int index)
+{
+    fileReader.SaveShows(CrawlersRunning[index]);
+    CrawlersRunning[index].StopWatching();
+}
 
         private void EndAllBots()
         {
