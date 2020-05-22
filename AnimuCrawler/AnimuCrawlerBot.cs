@@ -27,46 +27,6 @@ namespace AnimuCrawler
         private int updateTime;
         private Uri watchLink;
         private string seriesName;
-        public string Status
-        {
-            get { return status; }
-            private set
-            {
-                if (value != this.status)
-                {
-                    this.status = value;
-                    NotifyPropertyChanged();
-                }
-            }
-        }
-        public bool FoundNew
-        {
-            get { return foundNew; }
-            private set
-            {
-                if (value != this.foundNew)
-                {
-                    this.foundNew = value;
-                    NotifyPropertyChanged();
-                }
-            }
-        }
-        public int UpdateTime
-        {
-            get { return updateTime; }
-        }
-        public Uri WatchLink
-        {
-            get { return watchLink; }
-        }
-        public string SeriesName
-        {
-            get { return seriesName; }
-        }
-        public int ID
-        {
-            get { return id; }
-        }
 
         public AnimuCrawlerBot(string link, string seriesName, int updateTime, int id)
         {
@@ -135,7 +95,7 @@ namespace AnimuCrawler
             if (noSpeTitle.ToLower().Contains(noSpeName.ToLower()))
             {
                 Uri absoluteUrl = NormalizeUrl(watchLink, newUrl);
-                if (!Episodes.Contains(absoluteUrl) &&
+                if (!Episodes.Contains(absoluteUrl) && absoluteUrl != null &&
                     (absoluteUrl.Scheme == Uri.UriSchemeHttp || absoluteUrl.Scheme == Uri.UriSchemeHttps))
                 {
                     Episodes.Add(absoluteUrl);
@@ -180,6 +140,52 @@ namespace AnimuCrawler
             {
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
             }
+        }
+
+        public string Status
+        {
+            get { return status; }
+            private set
+            {
+                if (value != this.status)
+                {
+                    this.status = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
+        public bool FoundNew
+        {
+            get { return foundNew; }
+            private set
+            {
+                if (value != this.foundNew)
+                {
+                    this.foundNew = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
+        public int UpdateTime
+        {
+            get { return updateTime; }
+        }
+
+        public Uri WatchLink
+        {
+            get { return watchLink; }
+        }
+
+        public string SeriesName
+        {
+            get { return seriesName; }
+        }
+
+        public int ID
+        {
+            get { return id; }
         }
     }
 }
