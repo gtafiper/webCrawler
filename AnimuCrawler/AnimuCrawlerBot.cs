@@ -15,7 +15,7 @@ namespace AnimuCrawler
         private static readonly string STATE_RUNNING = "Running";
 
         private static readonly WebClient Client = new WebClient();
-        public List<Uri> Episodes { get; }
+        public List<Uri> Episodes { get; set; }
         Thread thread;
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -152,8 +152,13 @@ namespace AnimuCrawler
 
         public void StopWatching()
         {
-            thread.Interrupt();
+            if (thread != null)
+            {
+                thread.Interrupt();
+            }
+
             Status = STATE_PAUSE;
+            
         }
 
         private static Uri NormalizeUrl(Uri hostUrl, string url)
