@@ -21,7 +21,7 @@ namespace AnimuCrawler
         public event PropertyChangedEventHandler PropertyChanged;
 
         private Task task;
-        private string id;
+        private int id;
         private string status;
         private bool foundNew;
         private int updateTime;
@@ -63,7 +63,7 @@ namespace AnimuCrawler
         {
             get { return seriesName; }
         }
-        public string ID
+        public int ID
         {
             get { return id; }
         }
