@@ -63,6 +63,10 @@ namespace AnimuCrawler
         {
             get { return seriesName; }
         }
+        public string ID
+        {
+            get { return id; }
+        }
 
         public AnimuCrawlerBot(string link, string seriesName, int updateTime, string id)
         {
