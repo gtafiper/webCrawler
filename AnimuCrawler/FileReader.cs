@@ -16,26 +16,43 @@ namespace AnimuCrawler
                 Directory.CreateDirectory("bots");
             }
 
-            using StreamWriter sw = File.AppendText(path);
+            using (StreamWriter sw = File.AppendText(path)){
 
-            sw.WriteLine(crawler.WatchLink);
-            sw.WriteLine(crawler.SeriesName);
-            sw.WriteLine(crawler.UpdateTime);
-            sw.WriteLine(crawler.ID);
-            sw.Close();
+                sw.WriteLine(crawler.WatchLink);
+                sw.WriteLine(crawler.SeriesName);
+                sw.WriteLine(crawler.UpdateTime);
+                sw.WriteLine(crawler.ID);
+            }
+            
         }
 
 
         public void SaveShows(AnimuCrawlerBot crawler)
         {
             string path = @"bots\" + crawler.ID.ToString() + ".txt";
-            using StreamWriter sw = File.AppendText(path);
-            foreach (var link in crawler.Episodes)
+
+            if (!Directory.Exists("bots"))
             {
-                sw.WriteLine(link);
+                Directory.CreateDirectory("bots");
             }
 
-            sw.Close();
+            var tempFile = Path.GetTempFileName();
+
+            using (StreamWriter sw1 = File.AppendText(tempFile))
+            {
+                sw1.WriteLine(crawler.WatchLink);
+                sw1.WriteLine(crawler.SeriesName);
+                sw1.WriteLine(crawler.UpdateTime);
+                sw1.WriteLine(crawler.ID);
+                foreach (var link in crawler.Episodes)
+                {
+                    sw1.WriteLine(link);
+                }
+            }
+
+            File.Delete(path);
+            File.Move(tempFile, path);
+
         }
 
         public void DeleteFile(AnimuCrawlerBot crawler)
@@ -52,9 +69,16 @@ namespace AnimuCrawler
         }
 
 
-        public List<string> ReadLink(string path)
+        public List<Uri> ReadLink(string path)
         {
-            return File.ReadAllLines(path).Skip(5).ToList();
+            List<Uri> uris = new List<Uri>();
+            List<string> lines =  File.ReadAllLines(path).Skip(4).ToList();
+            foreach (var line in lines)
+            {
+                uris.Add(new UriBuilder(line).Uri);
+            }
+
+            return uris;
         }
 
         private string GetCrawlerUrl(string path)
@@ -72,7 +96,8 @@ namespace AnimuCrawler
             int updateTime;
             try
             {
-                updateTime = int.Parse(File.ReadAllLines(path).Skip(2).FirstOrDefault() ?? throw new InvalidOperationException());
+                updateTime = int.Parse(File.ReadAllLines(path).Skip(2).FirstOrDefault() ??
+                                       throw new InvalidOperationException());
             }
             catch (Exception e)
             {
@@ -88,9 +113,8 @@ namespace AnimuCrawler
             int id;
             try
             {
-
-                id = int.Parse(File.ReadAllLines(path).Skip(3).FirstOrDefault() ?? throw new InvalidOperationException());
-
+                id = int.Parse(
+                    File.ReadAllLines(path).Skip(3).FirstOrDefault() ?? throw new InvalidOperationException());
             }
             catch (Exception e)
             {
@@ -119,6 +143,7 @@ namespace AnimuCrawler
         {
             AnimuCrawlerBot bot = new AnimuCrawlerBot(GetCrawlerUrl(file), GetSeriesName(file),
                 GetUpdateTime(file), GetCrawlerId(file));
+            bot.Episodes = ReadLink(file);
 
             return bot;
         }
