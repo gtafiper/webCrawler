@@ -39,7 +39,7 @@ namespace AnimuCrawler
 
         public void AddBot(string watchLink, string title, int updateTime)
         {
-            AnimuCrawlerBot crawler = new AnimuCrawlerBot(watchLink, title, updateTime, title + updateTime);
+            AnimuCrawlerBot crawler = new AnimuCrawlerBot(watchLink, title, updateTime, 1);
             fileReader.WriteNewBotToFile(crawler);
             CrawlersRunning.Add(crawler);
         }
