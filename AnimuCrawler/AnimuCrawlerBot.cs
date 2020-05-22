@@ -9,9 +9,14 @@ namespace AnimuCrawler
 {
     public class AnimuCrawlerBot
     {
-        private static readonly Regex UrlTagPattern = new Regex(@"<a.*?href=[""'](?<url>.*?)[""'].*?>(?<name>.*?)</a>", RegexOptions.IgnoreCase);
-        private static readonly Regex HrefPattern = new Regex("href\\s*=\\s*(?:\"(?<1>[^\"]*)\"|(?<1>\\S+))", RegexOptions.IgnoreCase);
-        private static readonly Regex episodePattern = new Regex("\\/([A-Za-z0-9_-]+)(?:episode|ep|_)(?:-|)(\\d+)", RegexOptions.IgnoreCase);
+        private static readonly Regex UrlTagPattern = new Regex(@"<a.*?href=[""'](?<url>.*?)[""'].*?>(?<name>.*?)</a>",
+            RegexOptions.IgnoreCase);
+
+        private static readonly Regex HrefPattern =
+            new Regex("href\\s*=\\s*(?:\"(?<1>[^\"]*)\"|(?<1>\\S+))", RegexOptions.IgnoreCase);
+
+        private static readonly Regex episodePattern =
+            new Regex("\\/([A-Za-z0-9_-]+)(?:episode|ep|_)(?:-|)(\\d+)", RegexOptions.IgnoreCase);
 
         private static readonly WebClient Client = new WebClient();
 
@@ -21,14 +26,16 @@ namespace AnimuCrawler
         private Task task;
         private bool foundNew;
         private readonly List<Uri> episodes;
+        private string id;
 
-        public AnimuCrawlerBot(string link, string seriesName, int updateTime)
+        public AnimuCrawlerBot(string link, string seriesName, int updateTime, string id)
         {
             watchLink = new UriBuilder(link).Uri;
             this.seriesName = seriesName;
             this.updateTime = updateTime;
             episodes = new List<Uri>();
-            foundNew= false;
+            foundNew = false;
+            this.id = id;
         }
 
         public void StartWatching()
@@ -44,7 +51,6 @@ namespace AnimuCrawler
                     }
                 });
                 task.Start();
-
             }
             else
             {
@@ -65,12 +71,12 @@ namespace AnimuCrawler
                     handleEpisode(newUrl);
                 }
             }
+
             Console.WriteLine("new episode: " + foundNew);
         }
 
         private void handleEpisode(string newUrl)
         {
-
             Match episode = episodePattern.Match(newUrl);
             string title = episode.Groups[1].ToString().Replace('-', ' ');
             string noSpeTitle = Regex.Replace(title, @"[^0-9a-zA-Z]+", "");
@@ -79,7 +85,8 @@ namespace AnimuCrawler
             if (noSpeTitle.ToLower().Contains(noSpeName.ToLower()))
             {
                 Uri absoluteUrl = NormalizeUrl(watchLink, newUrl);
-                if (!episodes.Contains(absoluteUrl) && (absoluteUrl.Scheme == Uri.UriSchemeHttp || absoluteUrl.Scheme == Uri.UriSchemeHttps))
+                if (!episodes.Contains(absoluteUrl) &&
+                    (absoluteUrl.Scheme == Uri.UriSchemeHttp || absoluteUrl.Scheme == Uri.UriSchemeHttps))
                 {
                     episodes.Add(absoluteUrl);
                     Console.WriteLine(absoluteUrl.ToString());
@@ -88,7 +95,8 @@ namespace AnimuCrawler
             }
         }
 
-        public void seen() {
+        public void seen()
+        {
             foundNew = false;
         }
 
@@ -102,13 +110,39 @@ namespace AnimuCrawler
             bool urlOk = Uri.TryCreate(hostUrl, url, out var absoluteUrl);
             if (urlOk)
             {
-                return absoluteUrl.ToString().EndsWith("/") ?
-                    absoluteUrl : new UriBuilder(absoluteUrl + "/").Uri;
+                return absoluteUrl.ToString().EndsWith("/") ? absoluteUrl : new UriBuilder(absoluteUrl + "/").Uri;
             }
             else
             {
                 return null;
             }
+        }
+
+
+        public Uri GetWatchLink()
+        {
+            return watchLink;
+        }
+
+        public string GetSeriesName()
+        {
+            return seriesName;
+        }
+
+        public int GetUpdateTime()
+        {
+            return updateTime;
+        }
+
+
+        public string GetId()
+        {
+            return id;
+        }
+
+        public List<Uri> GetEpisodes()
+        {
+            return episodes;
         }
     }
 }
