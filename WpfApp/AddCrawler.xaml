@@ -5,8 +5,22 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfApp"
         mc:Ignorable="d"
-        Title="AddCrawler" Height="450" Width="800">
+        Title="Add Crawler" Height="215" Width="410" WindowStyle="SingleBorderWindow" ScrollViewer.VerticalScrollBarVisibility="Disabled" MinWidth="410" MinHeight="215" MaxWidth="410" MaxHeight="215" ResizeMode="NoResize">
+    
     <Grid>
-        
+        <TextBox x:Name="txtURL" HorizontalAlignment="Left" Margin="118,27,0,0" Text="" TextWrapping="Wrap" VerticalAlignment="Top" Width="264"/>
+        <TextBox x:Name="txtKeyword" HorizontalAlignment="Left" Margin="118,73,0,0" Text="" TextWrapping="Wrap" VerticalAlignment="Top" Width="264"/>
+        <Label Content="Web Url:" HorizontalAlignment="Left" Height="18" Margin="30,27,0,0" VerticalAlignment="Top" Width="85" Padding="0,0,0,0"/>
+        <Label Content="Title/keyword:" HorizontalAlignment="Left" Height="18" Margin="30,73,0,0" VerticalAlignment="Top" Width="85" Padding="0,0,0,0"/>
+        <Button Content="Add" HorizontalAlignment="Left" Height="24" Margin="319,133,0,0" VerticalAlignment="Top" Width="63" Click="OnAdd"/>
+        <ComboBox x:Name="comboTime" HorizontalAlignment="Left" Height="24" Margin="120,132,0,0" VerticalAlignment="Top" Width="130" SelectedIndex="0">
+            <ComboBoxItem Content="1 min"/>
+            <ComboBoxItem Content="5 min"/>
+            <ComboBoxItem Content="15 min"/>
+            <ComboBoxItem Content="1 hour"/>
+            <ComboBoxItem Content="1 day"/>
+        </ComboBox>
+        <Label Content="Run Every:" HorizontalAlignment="Left" Height="18" Margin="30,136,0,0" VerticalAlignment="Top" Width="85" Padding="0,0,0,0"/>
+
     </Grid>
 </Window>

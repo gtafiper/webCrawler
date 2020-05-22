@@ -1,100 +1,152 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Net;
+using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace AnimuCrawler
 {
-    public class AnimuCrawlerBot
+    public class AnimuCrawlerBot : INotifyPropertyChanged
     {
-        private static readonly Regex UrlTagPattern = new Regex(@"<a.*?href=[""'](?<url>.*?)[""'].*?>(?<name>.*?)</a>", RegexOptions.IgnoreCase);
-        private static readonly Regex HrefPattern = new Regex("href\\s*=\\s*(?:\"(?<1>[^\"]*)\"|(?<1>\\S+))", RegexOptions.IgnoreCase);
-        private static readonly Regex episodePattern = new Regex("\\/([A-Za-z0-9_-]+)(?:episode|ep|_)(?:-|)(\\d+)", RegexOptions.IgnoreCase);
+        private static readonly string STATE_PAUSE = "Paused";
+        private static readonly string STATE_RUNNING = "Running";
 
         private static readonly WebClient Client = new WebClient();
-
-        private readonly Uri watchLink;
-        private readonly string seriesName;
-        private readonly int updateTime;
-        private Task task;
-        private bool foundNew;
         private readonly List<Uri> episodes;
+        Thread thread;
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private Task task;
+        private string status;
+        private bool foundNew;
+        private int updateTime;
+        private Uri watchLink;
+        private string seriesName;
+        public string Status
+        {
+            get { return status; }
+            private set
+            {
+                if (value != this.status)
+                {
+                    this.status = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+        public bool FoundNew
+        {
+            get { return foundNew; }
+            private set
+            {
+                if (value != this.foundNew)
+                {
+                    this.foundNew = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+        public int UpdateTime
+        {
+            get { return updateTime; }
+        }
+        public Uri WatchLink
+        {
+            get { return watchLink; }
+        }
+        public string SeriesName
+        {
+            get { return seriesName; }
+        }
 
         public AnimuCrawlerBot(string link, string seriesName, int updateTime)
         {
-            watchLink = new UriBuilder(link).Uri;
+            this.watchLink = new UriBuilder(link).Uri;
             this.seriesName = seriesName;
             this.updateTime = updateTime;
             episodes = new List<Uri>();
-            foundNew= false;
+            foundNew = false;
+            Status = STATE_PAUSE;
         }
 
         public void StartWatching()
         {
-            if (task == null)
+            var tokenSource = new CancellationTokenSource();
+            var token = tokenSource.Token;
+            if (task != null) {
+                task.Dispose();
+            }
+            task = new Task(() =>
             {
-                task = new Task(() =>
+                thread = Thread.CurrentThread;
+                try
                 {
                     while (true)
                     {
                         Crawl();
-                        Thread.Sleep(updateTime);
-                    }
-                });
-                task.Start();
 
-            }
-            else
-            {
-                task.Start();
-            }
+                        Thread.Sleep(UpdateTime);
+                    }
+
+                }
+                catch (ThreadInterruptedException e)
+                {
+                    Console.WriteLine(e);
+                    token.ThrowIfCancellationRequested();
+                }
+            });
+            task.Start();
+            Status = STATE_RUNNING;
         }
 
         private void Crawl()
         {
-            string webPage = Client.DownloadString(watchLink);
-            MatchCollection links = UrlTagPattern.Matches(webPage);
-            int i = 1;
+            string webPage = Client.DownloadString(WatchLink);
+            MatchCollection links = RegexPatterns.UrlTagPattern.Matches(webPage);
             foreach (Match href in links)
             {
-                string newUrl = HrefPattern.Match(href.Value).Groups[1].Value;
-                if (episodePattern.IsMatch(newUrl))
+                string newUrl = RegexPatterns.HrefPattern.Match(href.Value).Groups[1].Value;
+                if (RegexPatterns.episodePattern.IsMatch(newUrl))
                 {
-                    handleEpisode(newUrl);
+                    HandleEpisode(newUrl);
                 }
             }
-            Console.WriteLine("new episode: " + foundNew);
+            Console.WriteLine("new episode: " + FoundNew);
         }
 
-        private void handleEpisode(string newUrl)
+        private void HandleEpisode(string newUrl)
         {
 
-            Match episode = episodePattern.Match(newUrl);
+            Match episode = RegexPatterns.episodePattern.Match(newUrl);
             string title = episode.Groups[1].ToString().Replace('-', ' ');
-            string noSpeTitle = Regex.Replace(title, @"[^0-9a-zA-Z]+", "");
-            string noSpeName = Regex.Replace(seriesName, @"[^0-9a-zA-Z]+", "");
+            string noSpeTitle = RegexPatterns.nonSpecialCharaterPattern.Replace(title, "");
+            string noSpeName = RegexPatterns.nonSpecialCharaterPattern.Replace(SeriesName, "");
 
             if (noSpeTitle.ToLower().Contains(noSpeName.ToLower()))
             {
-                Uri absoluteUrl = NormalizeUrl(watchLink, newUrl);
+                Uri absoluteUrl = NormalizeUrl(WatchLink, newUrl);
                 if (!episodes.Contains(absoluteUrl) && (absoluteUrl.Scheme == Uri.UriSchemeHttp || absoluteUrl.Scheme == Uri.UriSchemeHttps))
                 {
                     episodes.Add(absoluteUrl);
                     Console.WriteLine(absoluteUrl.ToString());
-                    foundNew = true;
+                    FoundNew = true;
                 }
             }
         }
 
-        public void seen() {
-            foundNew = false;
+        public void Seen()
+        {
+            FoundNew = false;
         }
 
         public void StopWatching()
         {
-            task.Dispose();
+            thread.Interrupt();
+            Status = STATE_PAUSE;
         }
 
         private static Uri NormalizeUrl(Uri hostUrl, string url)
@@ -108,6 +160,14 @@ namespace AnimuCrawler
             else
             {
                 return null;
+            }
+        }
+
+        private void NotifyPropertyChanged([CallerMemberName] String propertyName = "")
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
             }
         }
     }

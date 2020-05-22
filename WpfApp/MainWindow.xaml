@@ -5,28 +5,26 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfApp"
         mc:Ignorable="d"
-        Title="MainWindow" Height="325" Width="684">
-    <Grid HorizontalAlignment="Left" Width="678" Height="294" VerticalAlignment="Top">
-        <Grid.RowDefinitions>
-            <RowDefinition/>
-            <RowDefinition Height="0*"/>
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
-            <ColumnDefinition Width="0*"/>
-            <ColumnDefinition Width="Auto"/>
-        </Grid.ColumnDefinitions>
-        <TextBlock x:Name="titel" Margin="25,20,0,0" TextWrapping="Wrap" Text="Enter the website you wish to monitor" HorizontalAlignment="Left" Width="258" Height="20" VerticalAlignment="Top"/>
-        <TextBox x:Name="websiteTextBox" Margin="25,46,0,0" TextWrapping="Wrap" Height="18" VerticalAlignment="Top" HorizontalAlignment="Left" Width="259"/>
-        <TextBlock HorizontalAlignment="Left" Margin="25,91,0,0" Text="Enter the name of the show you wish to monitor" TextWrapping="Wrap" VerticalAlignment="Top" Width="261" Height="16"/>
-        <TextBox x:Name="showTextBox" Margin="25,111,0,0" TextWrapping="Wrap" Height="18" VerticalAlignment="Top" HorizontalAlignment="Left" Width="259"/>
-        <Button Content="Add To List" Margin="24,158,0,0" Height="20" VerticalAlignment="Top" HorizontalAlignment="Left" Width="62" Click="Button_Click"/>
-        <ListBox x:Name="pagesListBox" Margin="315,20,0,31" HorizontalAlignment="Left" Width="150" SelectionChanged="pagesListBox_SelectionChanged"/>
-        <TextBlock HorizontalAlignment="Left" Margin="316,3,0,0" Text="Pages being monitored now" TextWrapping="Wrap" Width="148" FontSize="11" Height="15" VerticalAlignment="Top"/>
-        <TextBlock HorizontalAlignment="Left" Margin="478,1,0,0" Text="Shows being watched now" TextWrapping="Wrap" Width="147" Height="16" VerticalAlignment="Top"/>
-        <ListBox x:Name="showsListBox" Margin="477,20,0,31" RenderTransformOrigin="0.491,0.503" HorizontalAlignment="Left" Width="150"/>
-        <Button Content="Remove Selected Page" HorizontalAlignment="Left" Margin="315,267,0,0" VerticalAlignment="Top" Click="Button_Click_1" Width="150" Height="20"/>
-        <Button Content="Remove Selected Show" HorizontalAlignment="Left" Margin="477,267,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.513,0.457" Click="RemoveShowButton" Width="150" Height="20"/>
-
+        Title="MainWindow" Height="345" Width="746" Background="#FFAAAAAA" ResizeMode="NoResize">
+    <Window.BorderBrush>
+        <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ActiveCaptionTextColorKey}}"/>
+    </Window.BorderBrush>
+    <Grid>
+        <DataGrid Margin="30,31,30,0" VerticalGridLinesBrush="#002E2E2E"
+                  x:Name="dataGrid"
+                  ItemsSource="{Binding Crawlers}" IsReadOnly="True"
+                  AutoGenerateColumns="False" HeadersVisibility="All" RowHeaderWidth="10" HorizontalContentAlignment="Left" Height="234" VerticalAlignment="Top" MinWidth="700" SelectionChanged="dataGrid_SelectionChanged">
+            <DataGrid.Columns>
+                <DataGridHyperlinkColumn x:Name="link" Header="Site"  Binding="{Binding WatchLink}" CanUserResize="False" MinWidth="300" MaxWidth="300"/>
+                <DataGridTextColumn Header="Key Word" Binding="{Binding SeriesName}" CanUserResize="False" MinWidth="200" MaxWidth="200" />
+                <DataGridTextColumn Header="Status" Binding="{Binding Status}" MinWidth="80" CanUserResize="False" MaxWidth="80" />
+                <DataGridTextColumn Header="Found New" Binding="{Binding FoundNew}" MinWidth="80" CanUserResize="False" MaxWidth="80" />
+            </DataGrid.Columns>
+        </DataGrid>
+        <TextBlock Margin="30,10,310,0" TextWrapping="Wrap" FontSize="16" Text="Crawlers Running" Height="21" VerticalAlignment="Top"></TextBlock>
+        <Button x:Name="btnStart"  Content="Start" Margin="0,270,270,0" Click="OnStart" HorizontalAlignment="Right" Height="20" VerticalAlignment="Top" Width="100"/>
+        <Button x:Name="btnPause" Content="Pause" Margin="0,270,150,0" RenderTransformOrigin="0.513,0.457" Click="OnPause" HorizontalAlignment="Right" Height="20" VerticalAlignment="Top" Width="100"/>
+        <Button x:Name="btnRemove" Content="Remove" Margin="0,270,30,0" RenderTransformOrigin="0.513,0.457" Click="OnRemove" HorizontalAlignment="Right" Height="20" VerticalAlignment="Top" Width="100"/>
+        <Button Content="+" Margin="30,270,0,0" Height="24" VerticalAlignment="Top" Click="OnAdd" HorizontalAlignment="Left" Width="21"/>
     </Grid>
 </Window>

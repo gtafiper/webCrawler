@@ -1,18 +1,25 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace AnimuCrawler
 {
-    class BotManager
+    public class BotManager
     {
-        private List<AnimuCrawlerBot> CrawlersRunning { get; }
+        private ObservableCollection<AnimuCrawlerBot> crawlers;
+        public ObservableCollection<AnimuCrawlerBot> CrawlersRunning
+        {
+            get { return crawlers; }
+            private set { crawlers = value; }
+        }
         private static BotManager manager;
 
         private BotManager()
         {
-            CrawlersRunning = new List<AnimuCrawlerBot>();
+            CrawlersRunning = new ObservableCollection<AnimuCrawlerBot>();
         }
 
-        private static BotManager GetInstance()
+        public static BotManager GetInstance()
         {
             if (manager == null)
             {
@@ -24,20 +31,20 @@ namespace AnimuCrawler
         public void AddBot(string watchLink, string title)
         {
             AnimuCrawlerBot crawler = new AnimuCrawlerBot(watchLink, title, 50000);
-            crawler.StartWatching();
-
             CrawlersRunning.Add(crawler);
         }
 
-        private void EndBot(int index) {
-            CrawlersRunning[index].StopWatching();
-        }
         private void EndAllBots()
         {
             foreach (AnimuCrawlerBot crawler in CrawlersRunning)
             {
                 crawler.StopWatching();
             }
+        }
+
+        public void RemoveBot(AnimuCrawlerBot active)
+        {
+            CrawlersRunning.Remove(active);
         }
     }
 }

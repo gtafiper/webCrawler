@@ -17,7 +17,7 @@ namespace AnimuCrawler
             AnimuCrawlerBot senpai = new AnimuCrawlerBot(urlStr, nameStr, 5000);
             senpai.StartWatching();
             Console.ReadLine();
-            senpai.seen();
+            senpai.Seen();
             Console.ReadLine();
 
         }

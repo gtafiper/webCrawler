@@ -1,18 +1,7 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using AnimuCrawler;
 
 namespace WpfApp
@@ -22,75 +11,79 @@ namespace WpfApp
     /// </summary>
     public partial class MainWindow : Window
     {
-        public FileReader reader = new FileReader();
-        List<string> listOfShows = new List<string>();
+        private ObservableCollection<AnimuCrawlerBot> crawlers;
+        private BotManager manager;
+        private AnimuCrawlerBot active;
+
+        public ObservableCollection<AnimuCrawlerBot> Crawlers
+        {
+            get { return crawlers; }
+            set { crawlers = value; }
+        }
+
+        public BotManager Manager
+        {
+            get { return manager; }
+            set { manager = value; }
+        }
+
         public MainWindow()
         {
             InitializeComponent();
-            List<string> listOfShows = reader.ReadShows();
-            if (listOfShows != null)
-            {
-                foreach (var item in listOfShows)
-                {
-                    showsListBox.Items.Add(item);
-                }
-            }
+            Manager = BotManager.GetInstance();
+            dataGrid.ItemsSource = null;
+            dataGrid.ItemsSource = Manager.CrawlersRunning;
+            Manager.AddBot("https://stackoverflow.com/questions/5809816/datagrid-binding-in-wpf", "dialogbox");
+            isButtonsEnabeld(false);
         }
 
 
-       
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+
+        private void OnAdd(object sender, RoutedEventArgs e)
         {
-            string website = this.websiteTextBox.Text;
-            this.pagesListBox.Items.Add(website);
-           
-            string show = this.showTextBox.Text;
-            reader.WriteShow(show);
-            
-            
-            foreach (var item in reader.ReadShows())
-            {
-                if (!showsListBox.Items.Contains(item))
-                {
-                    showsListBox.Items.Add(item);
-                }
-            }
-            
-            websiteTextBox.Clear();
-            showTextBox.Clear();
+            //AddCrawler winAdd = new AddCrawler();
+            //winAdd.Show();
+            Manager.AddBot("https://www.wcoanimedub.tv/", "Tower of God");
         }
 
-        private void pagesListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void OnStart(object sender, RoutedEventArgs e)
+        {
+            active.StartWatching();
+        }
+
+        private void OnPause(object sender, RoutedEventArgs e)
+        {
+            active.StopWatching();
+        }
+
+        private void OnRemove(object sender, RoutedEventArgs e)
+        {
+            Manager.RemoveBot(active);
+
+        }
+
+        private void dataGrid_Selected(object sender, RoutedEventArgs e)
         {
         }
 
-        private void RemoveShowButton(object sender, RoutedEventArgs e)
+        private void dataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (showsListBox.SelectedIndex > -1)
+            var temp = dataGrid.SelectedItem as AnimuCrawlerBot;
+            if (temp != null)
             {
-                reader.DeleteShow(sender.ToString());
-                showsListBox.Items.RemoveAt(showsListBox.SelectedIndex);
-                
+                isButtonsEnabeld(true);
+                active = temp;
             }
-            else
-            {
-                MessageBox.Show("Please select a Show to remove");
+            else {
+                isButtonsEnabeld(false);
             }
         }
 
-        private void Button_Click_1(object sender, RoutedEventArgs e)
-        {
-            if (pagesListBox.SelectedIndex > -1)
-            {
-                pagesListBox.Items.RemoveAt(pagesListBox.SelectedIndex);
-            }
-            else
-            {
-                MessageBox.Show("Please select a Page to remove");
-            }
+        private void isButtonsEnabeld(bool result) {
+            this.btnStart.IsEnabled = result;
+            this.btnPause.IsEnabled = result;
+            this.btnRemove.IsEnabled = result;
         }
-
-        
     }
 }
