@@ -51,6 +51,7 @@ namespace AnimuCrawler
         }
 
         public void StartBot(AnimuCrawlerBot active) {
+            active.StartWatching();
         }
 
         public void EndAllBots()
