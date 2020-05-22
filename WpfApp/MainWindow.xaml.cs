@@ -33,7 +33,6 @@ namespace WpfApp
             Manager = BotManager.GetInstance();
             dataGrid.ItemsSource = null;
             dataGrid.ItemsSource = Manager.CrawlersRunning;
-            Manager.AddBot("https://stackoverflow.com/questions/5809816/datagrid-binding-in-wpf", "dialogbox");
             isButtonsEnabeld(false);
         }
 
@@ -42,9 +41,6 @@ namespace WpfApp
 
         private void OnAdd(object sender, RoutedEventArgs e)
         {
-            //AddCrawler winAdd = new AddCrawler();
-            //winAdd.Show();
-            Manager.AddBot("https://www.wcoanimedub.tv/", "Tower of God");
         }
 
         private void OnStart(object sender, RoutedEventArgs e)
