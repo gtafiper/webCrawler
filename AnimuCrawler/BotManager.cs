@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Threading;
 
 namespace AnimuCrawler
 {
@@ -18,8 +19,12 @@ namespace AnimuCrawler
 
         private BotManager()
         {
-            CrawlersRunning = new ObservableCollection<AnimuCrawlerBot>();
-            CrawlersRunning1 = fileReader.GetAllBots();
+            try {
+                List<AnimuCrawlerBot> temp = fileReader.GetAllBots();
+                CrawlersRunning = new ObservableCollection<AnimuCrawlerBot>(temp);
+            } catch {
+                CrawlersRunning = new ObservableCollection<AnimuCrawlerBot>();
+            }
         }
 
         public static BotManager GetInstance()
@@ -32,18 +37,21 @@ namespace AnimuCrawler
             return manager;
         }
 
-        public void AddBot(string watchLink, string title, string id)
+        public void AddBot(string watchLink, string title, int updateTime)
         {
-            AnimuCrawlerBot crawler = new AnimuCrawlerBot(watchLink, title, 50000);
+            AnimuCrawlerBot crawler = new AnimuCrawlerBot(watchLink, title, updateTime, title + updateTime);
             fileReader.WriteNewBotToFile(crawler);
             CrawlersRunning.Add(crawler);
         }
 
-private void EndBot(int index)
-{
-    fileReader.SaveShows(CrawlersRunning[index]);
-    CrawlersRunning[index].StopWatching();
-}
+        private void EndBot(AnimuCrawlerBot active)
+        {
+            fileReader.SaveShows(active);
+            active.StopWatching();
+        }
+
+        private void StartBot(AnimuCrawlerBot active) {
+        }
 
         private void EndAllBots()
         {
@@ -55,6 +63,8 @@ private void EndBot(int index)
 
         public void RemoveBot(AnimuCrawlerBot active)
         {
+            active.StopWatching();
+            fileReader.DeleteFile(active);
             CrawlersRunning.Remove(active);
         }
     }
