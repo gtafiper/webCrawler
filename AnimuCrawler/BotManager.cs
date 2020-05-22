@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Dynamic;
 using System.Threading;
 
 namespace AnimuCrawler
@@ -39,9 +40,21 @@ namespace AnimuCrawler
 
         public void AddBot(string watchLink, string title, int updateTime)
         {
-            AnimuCrawlerBot crawler = new AnimuCrawlerBot(watchLink, title, updateTime, title + updateTime);
+            AnimuCrawlerBot crawler = new AnimuCrawlerBot(watchLink, title, updateTime, createUnigueID());
             fileReader.WriteNewBotToFile(crawler);
             CrawlersRunning.Add(crawler);
+        }
+
+        private int createUnigueID()
+        {
+            int id = 0;
+            foreach (var item in CrawlersRunning)
+            {
+                if (item.ID > id) {
+                    id = item.ID;
+                }
+            }
+            return id + 1;
         }
 
         public void EndBot(AnimuCrawlerBot active)

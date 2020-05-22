@@ -68,7 +68,7 @@ namespace AnimuCrawler
             get { return id; }
         }
 
-        public AnimuCrawlerBot(string link, string seriesName, int updateTime, string id)
+        public AnimuCrawlerBot(string link, string seriesName, int updateTime, int id)
         {
             this.watchLink = new UriBuilder(link).Uri;
             this.seriesName = seriesName;
