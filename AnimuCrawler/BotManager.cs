@@ -44,16 +44,16 @@ namespace AnimuCrawler
             CrawlersRunning.Add(crawler);
         }
 
-        private void EndBot(AnimuCrawlerBot active)
+        public void EndBot(AnimuCrawlerBot active)
         {
             fileReader.SaveShows(active);
             active.StopWatching();
         }
 
-        private void StartBot(AnimuCrawlerBot active) {
+        public void StartBot(AnimuCrawlerBot active) {
         }
 
-        private void EndAllBots()
+        public void EndAllBots()
         {
             foreach (AnimuCrawlerBot crawler in CrawlersRunning)
             {

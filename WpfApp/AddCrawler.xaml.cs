@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AnimuCrawler;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows;
@@ -17,9 +18,11 @@ namespace WpfApp
     /// </summary>
     public partial class AddCrawler : Window
     {
+        BotManager manager;
         public AddCrawler()
         {
             InitializeComponent();
+            manager = BotManager.GetInstance();
             
         }
 
@@ -50,8 +53,9 @@ namespace WpfApp
                 default:
                     break;
             }
+
+            manager.AddBot(uri, keyword, time);
             this.Close();
-            
         }
     }
 }

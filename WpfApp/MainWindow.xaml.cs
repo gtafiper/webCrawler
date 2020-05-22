@@ -41,16 +41,18 @@ namespace WpfApp
 
         private void OnAdd(object sender, RoutedEventArgs e)
         {
+            AddCrawler winAdd = new AddCrawler();
+            winAdd.Show();
         }
 
         private void OnStart(object sender, RoutedEventArgs e)
         {
-            active.StartWatching();
+            Manager.StartBot(active);
         }
 
         private void OnPause(object sender, RoutedEventArgs e)
         {
-            active.StopWatching();
+            Manager.EndBot(active);
         }
 
         private void OnRemove(object sender, RoutedEventArgs e)
