@@ -11,15 +11,13 @@ namespace SeriesCrawler
 {
     public class SeriesWebCrawler : INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler PropertyChanged;
+
         private static readonly string STATE_PAUSE = "Paused";
         private static readonly string STATE_RUNNING = "Running";
-
         private static readonly WebClient Client = new WebClient();
 
-        public event PropertyChangedEventHandler PropertyChanged;
-        
         private Thread thread;
-        
         private Task task;
         private int id;
         private string status;
@@ -29,8 +27,8 @@ namespace SeriesCrawler
         private string seriesName;
 
         #region Proberties
-
         public List<Uri> Episodes { get; set; }
+
         public string Status
         {
             get { return status; }
@@ -130,9 +128,7 @@ namespace SeriesCrawler
             {
                 thread.Interrupt();
             }
-
             Status = STATE_PAUSE;
-
         }
 
         private void Crawl()
@@ -147,12 +143,10 @@ namespace SeriesCrawler
                     HandleEpisode(newUrl);
                 }
             }
-            Console.WriteLine("new episode: " + FoundNew);
         }
 
         private void HandleEpisode(string newUrl)
         {
-
             Match episode = RegexPatterns.EpisodePattern.Match(newUrl);
             string title = episode.Groups[1].ToString().Replace('-', ' ');
             string noSpeTitle = RegexPatterns.NonSpecialCharaterPattern.Replace(title, "");
@@ -165,7 +159,6 @@ namespace SeriesCrawler
                     (absoluteUrl.Scheme == Uri.UriSchemeHttp || absoluteUrl.Scheme == Uri.UriSchemeHttps))
                 {
                     Episodes.Add(absoluteUrl);
-                    Console.WriteLine(absoluteUrl.ToString());
                     FoundNew = true;
                 }
             }

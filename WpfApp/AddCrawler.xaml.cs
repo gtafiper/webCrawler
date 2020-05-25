@@ -8,7 +8,13 @@ namespace WpfApp
     /// </summary>
     public partial class AddCrawler : Window
     {
-        ICrawlerManager manager;
+        private static readonly int TIME_1_MIN = 60000;
+        private static readonly int TIME_5_MIN = 300000;
+        private static readonly int TIME_15_MIN = 900000;
+        private static readonly int TIME_1_HOUR = 3600000;
+        private static readonly int TIME_1_DAY = 86400000;
+
+        private readonly ICrawlerManager manager;
 
         public AddCrawler()
         {
@@ -20,32 +26,19 @@ namespace WpfApp
         {
             string uri = this.txtURL.Text;
             string keyword = this.txtKeyword.Text;
-            int time;
-            switch (this.comboTime.SelectedIndex)
+            var time = this.comboTime.SelectedIndex switch
             {
-                case 0:
-                    time = 60000;
-                    break;
-                case 1:
-                    time = 300000;
-                    break;
-                case 2:
-                    time = 900000;
-                    break;
-                case 3:
-                    time = 3600000;
-                    break;
-                case 4:
-                    time = 86400000;
-                    break;
-                default:
-                    time = 60000;
-                    break;
-            }
-
+                0 => TIME_1_MIN,
+                1 => TIME_5_MIN,
+                2 => TIME_15_MIN,
+                3 => TIME_1_HOUR,
+                4 => TIME_1_DAY,
+                _ => TIME_1_MIN,
+            };
             manager.AddBot(uri, keyword, time);
 
             this.Close();
         }
+
     }
 }
