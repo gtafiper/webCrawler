@@ -2,13 +2,12 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 
-namespace AnimuCrawler
+namespace SeriesCrawler
 {
-    public class FileReader
+    public static class CrawlerFileHandler
     {
-        public void WriteNewBotToFile(AnimuCrawlerBot crawler)
+        public static void WriteNewBotToFile(SeriesWebCrawler crawler)
         {
             string path = @"bots\" + crawler.ID.ToString() + ".txt";
             if (!Directory.Exists("bots"))
@@ -23,11 +22,9 @@ namespace AnimuCrawler
                 sw.WriteLine(crawler.UpdateTime);
                 sw.WriteLine(crawler.ID);
             }
-            
         }
 
-
-        public void SaveShows(AnimuCrawlerBot crawler)
+        public static void SaveShows(SeriesWebCrawler crawler)
         {
             string path = @"bots\" + crawler.ID.ToString() + ".txt";
 
@@ -55,7 +52,7 @@ namespace AnimuCrawler
 
         }
 
-        public void DeleteFile(AnimuCrawlerBot crawler)
+        public static  void DeleteFile(SeriesWebCrawler crawler)
         {
             try
             {
@@ -69,7 +66,7 @@ namespace AnimuCrawler
         }
 
 
-        public List<Uri> ReadLink(string path)
+        public static List<Uri> ReadLink(string path)
         {
             List<Uri> uris = new List<Uri>();
             List<string> lines =  File.ReadAllLines(path).Skip(4).ToList();
@@ -81,17 +78,17 @@ namespace AnimuCrawler
             return uris;
         }
 
-        private string GetCrawlerUrl(string path)
+        private static string GetCrawlerUrl(string path)
         {
             return File.ReadAllLines(path).FirstOrDefault();
         }
 
-        private string GetSeriesName(string path)
+        private static string GetSeriesName(string path)
         {
             return File.ReadAllLines(path).Skip(1).FirstOrDefault();
         }
 
-        private int GetUpdateTime(string path)
+        private static int GetUpdateTime(string path)
         {
             int updateTime;
             try
@@ -108,7 +105,7 @@ namespace AnimuCrawler
             return updateTime;
         }
 
-        private int GetCrawlerId(string path)
+        private static int GetCrawlerId(string path)
         {
             int id;
             try
@@ -125,7 +122,7 @@ namespace AnimuCrawler
             return id;
         }
 
-        private string FindBotId(string id)
+        private static string FindBotId(string id)
         {
             string path = @"bots\" + id + ".txt";
             foreach (var bot in File.ReadAllLines(path))
@@ -139,9 +136,9 @@ namespace AnimuCrawler
             return null;
         }
 
-        private AnimuCrawlerBot CreateBotFromFile(string file)
+        private static SeriesWebCrawler CreateBotFromFile(string file)
         {
-            AnimuCrawlerBot bot = new AnimuCrawlerBot(GetCrawlerUrl(file), GetSeriesName(file),
+            SeriesWebCrawler bot = new SeriesWebCrawler(GetCrawlerUrl(file), GetSeriesName(file),
                 GetUpdateTime(file), GetCrawlerId(file));
             bot.Episodes = ReadLink(file);
 
@@ -149,9 +146,9 @@ namespace AnimuCrawler
         }
 
 
-        public List<AnimuCrawlerBot> GetAllBots()
+        public static List<SeriesWebCrawler> GetAllBots()
         {
-            List<AnimuCrawlerBot> bots = new List<AnimuCrawlerBot>();
+            List<SeriesWebCrawler> bots = new List<SeriesWebCrawler>();
             List<string> botFiles;
             try
             {

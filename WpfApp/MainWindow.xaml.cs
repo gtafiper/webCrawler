@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
-using AnimuCrawler;
+using SeriesCrawler;
 
 namespace WpfApp
 {
@@ -11,22 +10,16 @@ namespace WpfApp
     /// </summary>
     public partial class MainWindow : Window
     {
-        private ObservableCollection<AnimuCrawlerBot> crawlers;
-        private BotManager manager;
-        private AnimuCrawlerBot active;
-
-        public BotManager Manager
-        {
-            get { return manager; }
-            set { manager = value; }
-        }
+        private ObservableCollection<SeriesWebCrawler> crawlers;
+        private ICrawlerManager manager;
+        private SeriesWebCrawler active;
 
         public MainWindow()
         {
             InitializeComponent();
-            Manager = BotManager.GetInstance();
+            manager = CrawlerManager.GetInstance();
             dataGrid.ItemsSource = null;
-            dataGrid.ItemsSource = Manager.CrawlersRunning;
+            dataGrid.ItemsSource = manager.CrawlersRunning;
             isButtonsEnabeld(false);
         }
 
@@ -38,17 +31,17 @@ namespace WpfApp
 
         private void OnStart(object sender, RoutedEventArgs e)
         {
-            Manager.StartBot(active);
+            manager.StartBot(active);
         }
 
         private void OnPause(object sender, RoutedEventArgs e)
         {
-            Manager.EndBot(active);
+            manager.EndBot(active);
         }
 
         private void OnRemove(object sender, RoutedEventArgs e)
         {
-            Manager.RemoveBot(active);
+            manager.RemoveBot(active);
 
         }
 
@@ -58,12 +51,12 @@ namespace WpfApp
 
         private void dataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            var temp = dataGrid.SelectedItem as AnimuCrawlerBot;
+            var temp = dataGrid.SelectedItem as SeriesWebCrawler;
             if (temp != null)
             {
                 isButtonsEnabeld(true);
                 active = temp;
-                active.Seen();
+                manager.MarkAsSeen(active);
             }
             else {
                 isButtonsEnabeld(false);

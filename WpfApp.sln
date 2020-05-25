@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.29613.14
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WpfApp", "WpfApp\WpfApp.csproj", "{E670A9BF-F0C4-4001-A513-F0475BC5BD1D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AnimuCrawler", "AnimuCrawler\AnimuCrawler.csproj", "{7E0F856A-CFD7-4A3D-9485-935F99A40DBD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SeriesCrawler", "AnimuCrawler\SeriesCrawler.csproj", "{7E0F856A-CFD7-4A3D-9485-935F99A40DBD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

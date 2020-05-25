@@ -1,15 +1,5 @@
-﻿using AnimuCrawler;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using SeriesCrawler;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace WpfApp
 {
@@ -18,21 +8,19 @@ namespace WpfApp
     /// </summary>
     public partial class AddCrawler : Window
     {
-        BotManager manager;
+        ICrawlerManager manager;
+
         public AddCrawler()
         {
             InitializeComponent();
-            manager = BotManager.GetInstance();
-            
+            manager = CrawlerManager.GetInstance();
         }
 
         private void OnAdd(object sender, RoutedEventArgs e)
         {
             string uri = this.txtURL.Text;
-            Console.WriteLine(uri);
             string keyword = this.txtKeyword.Text;
-            Console.WriteLine(keyword);
-            int time = 60000;
+            int time;
             switch (this.comboTime.SelectedIndex)
             {
                 case 0:
@@ -51,10 +39,12 @@ namespace WpfApp
                     time = 86400000;
                     break;
                 default:
+                    time = 60000;
                     break;
             }
 
             manager.AddBot(uri, keyword, time);
+
             this.Close();
         }
     }
