@@ -72,7 +72,7 @@ namespace SeriesCrawler
 
         public void MarkAsSeen(SeriesWebCrawler active)
         {
-            active.StartWatching();
+            active.Seen();
         }
 
         public void EndAllBots()

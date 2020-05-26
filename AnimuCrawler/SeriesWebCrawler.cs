@@ -148,12 +148,15 @@ namespace SeriesCrawler
         private void HandleEpisode(string newUrl)
         {
             Match episode = RegexPatterns.EpisodePattern.Match(newUrl);
-            string title = episode.Groups[1].ToString().Replace('-', ' ');
+
+            string title = episode.Groups[1].ToString();
+
             string noSpeTitle = RegexPatterns.NonSpecialCharaterPattern.Replace(title, "");
             string noSpeName = RegexPatterns.NonSpecialCharaterPattern.Replace(SeriesName, "");
 
             if (noSpeTitle.ToLower().Contains(noSpeName.ToLower()))
             {
+                Console.WriteLine(newUrl);
                 Uri absoluteUrl = NormalizeUrl(watchLink, newUrl);
                 if (!Episodes.Contains(absoluteUrl) && absoluteUrl != null &&
                     (absoluteUrl.Scheme == Uri.UriSchemeHttp || absoluteUrl.Scheme == Uri.UriSchemeHttps))
