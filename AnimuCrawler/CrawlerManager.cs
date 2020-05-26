@@ -40,12 +40,12 @@ namespace SeriesCrawler
 
         public void AddBot(string watchLink, string title, int updateTime)
         {
-            SeriesWebCrawler crawler = new SeriesWebCrawler(watchLink, title, updateTime, createUnigueID());
+            SeriesWebCrawler crawler = new SeriesWebCrawler(watchLink, title, updateTime, CreateUnigueID());
             CrawlerFileHandler.WriteNewBotToFile(crawler);
             CrawlersRunning.Add(crawler);
         }
 
-        private int createUnigueID()
+        private int CreateUnigueID()
         {
             int id = 0;
             foreach (var item in CrawlersRunning)

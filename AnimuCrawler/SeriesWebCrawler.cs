@@ -89,32 +89,34 @@ namespace SeriesCrawler
 
         internal void StartWatching()
         {
-            var tokenSource = new CancellationTokenSource();
-            var token = tokenSource.Token;
-            if (task != null) {
-                task.Dispose();
-            }
-            task = new Task(() =>
+            if (Status != STATE_RUNNING)
             {
-                thread = Thread.CurrentThread;
-                try
+                if (task != null)
                 {
-                    while (true)
+                    task.Dispose();
+                }
+
+                task = new Task(() =>
+                {
+                    thread = Thread.CurrentThread;
+                    try
                     {
-                        Crawl();
+                        while (true)
+                        {
+                            Crawl();
 
-                        Thread.Sleep(UpdateTime);
+                            Thread.Sleep(UpdateTime);
+                        }
                     }
+                    catch (ThreadInterruptedException e)
+                    {
+                        Console.WriteLine(e);
+                    }
+                });
 
-                }
-                catch (ThreadInterruptedException e)
-                {
-                    Console.WriteLine(e);
-                    token.ThrowIfCancellationRequested();
-                }
-            });
-            task.Start();
-            Status = STATE_RUNNING;
+                task.Start();
+                Status = STATE_RUNNING;
+            }   
         }
 
         internal void Seen()
@@ -124,6 +126,7 @@ namespace SeriesCrawler
 
         internal void StopWatching()
         {
+            
             if (thread != null)
             {
                 thread.Interrupt();
