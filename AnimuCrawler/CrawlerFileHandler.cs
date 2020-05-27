@@ -152,7 +152,7 @@ namespace SeriesCrawler
             List<string> botFiles;
             try
             {
-                botFiles = Directory.GetFiles(@"bots", "*").ToList();
+                botFiles = Directory.GetFiles(@"bots", "*.txt").ToList();
             }
             catch (FileNotFoundException e)
             {
